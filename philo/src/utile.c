@@ -6,11 +6,25 @@
 /*   By: jaeskim <jaeskim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 21:46:19 by jaeskim           #+#    #+#             */
-/*   Updated: 2021/06/18 16:42:24 by jaeskim          ###   ########.fr       */
+/*   Updated: 2021/06/19 00:17:36 by jaeskim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	print_philo_msg(t_philo *philo, char *str)
+{
+	long long		ms;
+	struct timeval	now;
+
+	gettimeofday(&now, NULL);
+	ms = now.tv_sec * 1000;
+	ms += now.tv_usec / 1000;
+	ms -= philo->info->create_at.tv_sec * 1000;
+	ms -= philo->info->create_at.tv_usec / 1000;
+	if (!philo->info->finish)
+		printf("%lld\t%d\t%s\n", ms, philo->n + 1, str);
+}
 
 int	ft_puterror(char *str)
 {

@@ -6,7 +6,7 @@
 /*   By: jaeskim <jaeskim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 21:41:53 by jaeskim           #+#    #+#             */
-/*   Updated: 2021/06/18 16:41:56 by jaeskim          ###   ########.fr       */
+/*   Updated: 2021/06/19 00:19:08 by jaeskim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <pthread.h>
+# include <sys/time.h>
 
 # define FT_ERROR		1
 # define FT_SUCCESS		0
@@ -25,23 +26,30 @@
 typedef struct s_philo
 {
 	int				n;
-	pthread_mutex_t	left;
-	pthread_mutex_t	right;
+	pthread_mutex_t	*left;
+	pthread_mutex_t	*right;
+	pthread_mutex_t	check_mutex;
 	pthread_t		thread;
+	struct s_info	*info;
+	struct timeval	last_time_to_eat;
+
 }					t_philo;
 
 typedef struct s_info
 {
-	int		num_of_philo;
-	int		time_to_die;
-	int		time_to_eat;
-	int		time_to_sleep;
-	int		num_of_must_eat;
-	t_philo	*philos;
+	int				num_of_philo;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				num_of_must_eat;
+	int				finish;
+	t_philo			*philos;
+	pthread_mutex_t	*forks;
+	struct timeval	create_at;
 }			t_info;
 
 int		init(t_info *info, int argc, char *argv[]);
-int		create_philos(t_info *info);
+void	*philo(void *argv);
 
 /* ========================================================================== */
 /*                                  UTILE                                     */
@@ -51,5 +59,6 @@ int		ft_strlen(char *str);
 int		ft_atoi(const char *nptr);
 int		ft_puterror(char *str);
 int		ft_malloc(void *dst, size_t size);
+void	print_philo_msg(t_philo *philo, char *str);
 
 #endif

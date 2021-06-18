@@ -6,7 +6,7 @@
 /*   By: jaeskim <jaeskim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 13:43:05 by jaeskim           #+#    #+#             */
-/*   Updated: 2021/06/18 17:33:35 by jaeskim          ###   ########.fr       */
+/*   Updated: 2021/06/19 00:19:30 by jaeskim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ static void	parsing_arg(t_info *info, int argc, char *argv[])
 	info->time_to_die = ft_atoi(argv[2]);
 	info->time_to_eat = ft_atoi(argv[3]);
 	info->time_to_sleep = ft_atoi(argv[4]);
-	if (argc == 5)
+	if (argc == 6)
 		info->num_of_must_eat = ft_atoi(argv[5]);
 }
 
 static int	check_info(t_info *info, int argc)
 {
-	if (argc == 5 && info->num_of_must_eat <= 0)
+	if (argc == 6 && info->num_of_must_eat <= 0)
 		return (ft_puterror("ERROR: wrong num of must eat\n"));
 	if (info->num_of_philo < 0)
 		return (ft_puterror("ERROR: wrong num of philo\n"));
@@ -41,20 +41,21 @@ static int	init_philos(t_info *info)
 {
 	int		i;
 
-	if (ft_malloc(&info->philos, sizeof(t_philo) * info->num_of_philo))
+	if (ft_malloc(&info->philos, sizeof(t_philo) * info->num_of_philo) || \
+		ft_malloc(&info->forks, sizeof(pthread_mutex_t) * info->num_of_philo))
 		return (ft_puterror("ERROR: malloc failed\n"));
 	i = 0;
 	while (i < info->num_of_philo)
 	{
 		info->philos[i].n = i;
+		pthread_mutex_init(&info->forks[i], NULL);
+		pthread_mutex_init(&info->philos[i].check_mutex, NULL);
 		if (i == 0)
-			pthread_mutex_init(&info->philos[i].left, NULL);
+			info->philos[i].left = &info->forks[info->num_of_philo - 1];
 		else
-			info->philos[i].left = info->philos[i - 1].right;
-		if (i == info->num_of_philo - 1)
-			info->philos[i].right = info->philos[0].left;
-		else
-			pthread_mutex_init(&info->philos[i].right, NULL);
+			info->philos[i].left = &info->forks[i - 1];
+		info->philos[i].right = &info->forks[i];
+		info->philos[i].info = info;
 		++i;
 	}
 	return (FT_SUCCESS);

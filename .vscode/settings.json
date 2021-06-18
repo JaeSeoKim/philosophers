@@ -8,6 +8,7 @@
     "stdlib.h": "c",
     "__threading_support": "cpp",
     "mutex": "cpp",
-    "ios": "c"
+    "ios": "c",
+    "time.h": "c"
   }
 }
