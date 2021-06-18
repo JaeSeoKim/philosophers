@@ -1,0 +1,23 @@
+{
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "build philo",
+      "command": "/usr/bin/make",
+      "args": ["-C", "philo/", "re"],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "DEBUG": "true"
+        }
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "task for philo"
+    }
+  ],
+  "version": "2.0.0"
+}
