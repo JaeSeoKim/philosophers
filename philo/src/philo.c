@@ -6,7 +6,7 @@
 /*   By: jaeskim <jaeskim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 15:51:22 by jaeskim           #+#    #+#             */
-/*   Updated: 2021/06/19 00:20:18 by jaeskim          ###   ########.fr       */
+/*   Updated: 2021/06/19 02:03:24 by jaeskim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static void	eating(t_philo *philo)
 	pthread_mutex_lock(&philo->check_mutex);
 	gettimeofday(&philo->last_time_to_eat, NULL);
 	print_philo_msg(philo, "is eating");
+	philo->num_of_eat += 1;
 	usleep(philo->info->time_to_eat * 1000);
 	pthread_mutex_unlock(philo->right);
 	pthread_mutex_unlock(philo->left);

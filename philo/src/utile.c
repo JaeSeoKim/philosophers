@@ -6,40 +6,45 @@
 /*   By: jaeskim <jaeskim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 21:46:19 by jaeskim           #+#    #+#             */
-/*   Updated: 2021/06/19 00:17:36 by jaeskim          ###   ########.fr       */
+/*   Updated: 2021/06/19 01:09:35 by jaeskim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+long long	time_to_ms(struct timeval now)
+{
+	long long		ms;
+
+	ms = now.tv_sec * 1000;
+	ms += now.tv_usec / 1000;
+	return (ms);
+}
 
 void	print_philo_msg(t_philo *philo, char *str)
 {
 	long long		ms;
 	struct timeval	now;
 
+	pthread_mutex_lock(&philo->info->finish_mutex);
 	gettimeofday(&now, NULL);
-	ms = now.tv_sec * 1000;
-	ms += now.tv_usec / 1000;
-	ms -= philo->info->create_at.tv_sec * 1000;
-	ms -= philo->info->create_at.tv_usec / 1000;
+	ms = time_to_ms(now) - time_to_ms(philo->info->create_at);
 	if (!philo->info->finish)
-		printf("%lld\t%d\t%s\n", ms, philo->n + 1, str);
+		printf("%lld\t%d\t %s\n", ms, philo->n + 1, str);
+	pthread_mutex_unlock(&philo->info->finish_mutex);
 }
 
 int	ft_puterror(char *str)
 {
-	write(2, str, ft_strlen(str));
-	return (FT_ERROR);
-}
+	char	*s;
+	int		i;
 
-int	ft_strlen(char *str)
-{
-	int	i;
-
+	s = str;
 	i = 0;
-	while (*str++)
+	while (*s++)
 		i++;
-	return (i);
+	write(2, str, i);
+	return (FT_ERROR);
 }
 
 int	ft_atoi(const char *nptr)

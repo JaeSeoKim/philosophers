@@ -6,7 +6,7 @@
 /*   By: jaeskim <jaeskim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 21:41:53 by jaeskim           #+#    #+#             */
-/*   Updated: 2021/06/19 00:19:08 by jaeskim          ###   ########.fr       */
+/*   Updated: 2021/06/19 01:50:26 by jaeskim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 typedef struct s_philo
 {
 	int				n;
+	int				num_of_eat;
+	pthread_mutex_t	num_of_eat_mutex;
 	pthread_mutex_t	*left;
 	pthread_mutex_t	*right;
 	pthread_mutex_t	check_mutex;
@@ -43,22 +45,26 @@ typedef struct s_info
 	int				time_to_sleep;
 	int				num_of_must_eat;
 	int				finish;
+	pthread_mutex_t	finish_mutex;
 	t_philo			*philos;
 	pthread_mutex_t	*forks;
 	struct timeval	create_at;
 }			t_info;
 
-int		init(t_info *info, int argc, char *argv[]);
-void	*philo(void *argv);
+int			init(t_info *info, int argc, char *argv[]);
+void		*philo(void *argv);
+void		*monitor(void *argv);
+void		*monitor_each_must_eat(void *argv);
 
 /* ========================================================================== */
 /*                                  UTILE                                     */
 /* ========================================================================== */
 
-int		ft_strlen(char *str);
-int		ft_atoi(const char *nptr);
-int		ft_puterror(char *str);
-int		ft_malloc(void *dst, size_t size);
-void	print_philo_msg(t_philo *philo, char *str);
+int			ft_strlen(char *str);
+int			ft_atoi(const char *nptr);
+int			ft_puterror(char *str);
+int			ft_malloc(void *dst, size_t size);
+long long	time_to_ms(struct timeval now);
+void		print_philo_msg(t_philo *philo, char *str);
 
 #endif

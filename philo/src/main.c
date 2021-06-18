@@ -6,41 +6,31 @@
 /*   By: jaeskim <jaeskim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 21:41:24 by jaeskim           #+#    #+#             */
-/*   Updated: 2021/06/19 00:31:19 by jaeskim          ###   ########.fr       */
+/*   Updated: 2021/06/19 02:01:00 by jaeskim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	*monitor(void *argv)
+static void	join_and_free_philos(t_info *info)
 {
-	t_philo			*philo;
-	struct timeval	now;
-	struct timeval	last_time_to_eat;
-	long long		ms;
+	int		i;
 
-	philo = argv;
-	usleep(100);
-	while (!philo->info->finish)
+	i = 0;
+	while (i < info->num_of_philo)
 	{
-		pthread_mutex_lock(&philo->check_mutex);
-		last_time_to_eat = philo->last_time_to_eat;
-		gettimeofday(&now, NULL);
-		ms = now.tv_sec * 1000;
-		ms += now.tv_usec / 1000;
-		ms -= last_time_to_eat.tv_sec * 1000;
-		ms -= last_time_to_eat.tv_usec / 1000;
-		if (ms >= philo->info->time_to_die)
-		{
-			print_philo_msg(philo, "died");
-			philo->info->finish = 1;
-		}
-		pthread_mutex_unlock(&philo->check_mutex);
+		pthread_join(info->philos[i].thread, NULL);
+		pthread_mutex_destroy(&info->philos[i].check_mutex);
+		pthread_mutex_destroy(&info->philos[i++].num_of_eat_mutex);
 	}
-	return (NULL);
+	free(info->philos);
+	i = 0;
+	while (i < info->num_of_philo)
+		pthread_mutex_destroy(&info->forks[i++]);
+	free(info->forks);
 }
 
-static int	create_philos(t_info *info)
+static void	create_philos(t_info *info)
 {
 	int			i;
 	pthread_t	thread;
@@ -56,14 +46,11 @@ static int	create_philos(t_info *info)
 		pthread_detach(thread);
 		++i;
 	}
-	i = 0;
-	while (i < info->num_of_philo)
+	if (info->num_of_must_eat != 0)
 	{
-		if (pthread_join(info->philos[i].thread, NULL))
-			return (ft_puterror("ERROR: pthread_join fail.\n"));
-		++i;
+		pthread_create(&thread, NULL, monitor_each_must_eat, info);
+		pthread_detach(thread);
 	}
-	return (FT_SUCCESS);
 }
 
 int	main(int argc, char *argv[])
@@ -75,7 +62,7 @@ int	main(int argc, char *argv[])
 		return (ft_puterror("ERROR: wrong argc\n"));
 	if (init(&info, argc, argv))
 		return (1);
-	if (create_philos(&info))
-		return (1);
+	create_philos(&info);
+	join_and_free_philos(&info);
 	return (0);
 }

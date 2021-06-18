@@ -6,7 +6,7 @@
 /*   By: jaeskim <jaeskim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 13:43:05 by jaeskim           #+#    #+#             */
-/*   Updated: 2021/06/19 00:19:30 by jaeskim          ###   ########.fr       */
+/*   Updated: 2021/06/19 02:01:01 by jaeskim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static int	init_philos(t_info *info)
 {
 	int		i;
 
+	pthread_mutex_init(&info->finish_mutex, NULL);
 	if (ft_malloc(&info->philos, sizeof(t_philo) * info->num_of_philo) || \
 		ft_malloc(&info->forks, sizeof(pthread_mutex_t) * info->num_of_philo))
 		return (ft_puterror("ERROR: malloc failed\n"));
@@ -50,6 +51,7 @@ static int	init_philos(t_info *info)
 		info->philos[i].n = i;
 		pthread_mutex_init(&info->forks[i], NULL);
 		pthread_mutex_init(&info->philos[i].check_mutex, NULL);
+		pthread_mutex_init(&info->philos[i].num_of_eat_mutex, NULL);
 		if (i == 0)
 			info->philos[i].left = &info->forks[info->num_of_philo - 1];
 		else
