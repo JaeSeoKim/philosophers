@@ -6,7 +6,7 @@
 /*   By: jaeskim <jaeskim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 21:41:53 by jaeskim           #+#    #+#             */
-/*   Updated: 2021/06/19 01:50:26 by jaeskim          ###   ########.fr       */
+/*   Updated: 2021/06/20 23:55:03 by jaeskim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ typedef struct s_philo
 {
 	int				n;
 	int				num_of_eat;
-	pthread_mutex_t	num_of_eat_mutex;
 	pthread_mutex_t	*left;
 	pthread_mutex_t	*right;
 	pthread_mutex_t	check_mutex;
@@ -40,6 +39,7 @@ typedef struct s_philo
 typedef struct s_info
 {
 	int				num_of_philo;
+	int				num_of_eat_finish_philo;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;

@@ -6,7 +6,7 @@
 /*   By: jaeskim <jaeskim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 13:43:05 by jaeskim           #+#    #+#             */
-/*   Updated: 2021/06/19 02:01:01 by jaeskim          ###   ########.fr       */
+/*   Updated: 2021/06/20 23:48:05 by jaeskim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ static int	init_philos(t_info *info)
 		info->philos[i].n = i;
 		pthread_mutex_init(&info->forks[i], NULL);
 		pthread_mutex_init(&info->philos[i].check_mutex, NULL);
-		pthread_mutex_init(&info->philos[i].num_of_eat_mutex, NULL);
 		if (i == 0)
 			info->philos[i].left = &info->forks[info->num_of_philo - 1];
 		else

@@ -6,7 +6,7 @@
 /*   By: jaeskim <jaeskim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 00:53:57 by jaeskim           #+#    #+#             */
-/*   Updated: 2021/06/19 02:06:40 by jaeskim          ###   ########.fr       */
+/*   Updated: 2021/06/20 23:59:16 by jaeskim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,14 @@
 void	*monitor_each_must_eat(void *argv)
 {
 	t_info	*info;
-	int		i;
-	int		cnt;
 
 	info = argv;
 	while (!info->finish)
 	{
-		cnt = 0;
-		i = 0;
-		while (i < info->num_of_philo)
-		{
-			if (info->philos[i].num_of_eat >= info->num_of_must_eat)
-				++cnt;
-			pthread_mutex_lock(&info->finish_mutex);
-			if (cnt == info->num_of_philo)
-				info->finish = 1;
-			pthread_mutex_unlock(&info->finish_mutex);
-			++i;
-		}
+		pthread_mutex_lock(&info->finish_mutex);
+		if (info->num_of_eat_finish_philo == info->num_of_philo)
+			info->finish = 1;
+		pthread_mutex_unlock(&info->finish_mutex);
 	}
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: jaeskim <jaeskim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 21:41:24 by jaeskim           #+#    #+#             */
-/*   Updated: 2021/06/19 02:01:00 by jaeskim          ###   ########.fr       */
+/*   Updated: 2021/06/20 23:48:06 by jaeskim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ static void	join_and_free_philos(t_info *info)
 	while (i < info->num_of_philo)
 	{
 		pthread_join(info->philos[i].thread, NULL);
-		pthread_mutex_destroy(&info->philos[i].check_mutex);
-		pthread_mutex_destroy(&info->philos[i++].num_of_eat_mutex);
+		pthread_mutex_destroy(&info->philos[i++].check_mutex);
 	}
 	free(info->philos);
 	i = 0;
