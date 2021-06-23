@@ -2,7 +2,7 @@
 
 ## dining philosophers problem
 
-[![jaeskim's 42 Push_swap Score](https://badge42.herokuapp.com/api/project/jaeskim/42cursus-philosophers)](https://github.com/JaeSeoKim/badge42)
+[![jaeskim's 42 Push_swap Score](https://badge42.herokuapp.com/api/project/jaeskim/Philosophers)](https://github.com/JaeSeoKim/badge42)
 
 > In this project, you will learn the basics of threading a process. You will learn how to make threads. You will discover the mutex.
 >
