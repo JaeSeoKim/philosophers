@@ -6,7 +6,7 @@
 /*   By: jaeskim <jaeskim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 00:53:57 by jaeskim           #+#    #+#             */
-/*   Updated: 2021/06/20 23:59:16 by jaeskim          ###   ########.fr       */
+/*   Updated: 2021/06/29 17:54:28 by jaeskim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ void	*monitor(void *argv)
 		gettimeofday(&now, NULL);
 		if (ms >= philo->info->time_to_die && philo->info->finish == 0)
 		{
-			printf("%lld\t%d\t %s\n", ms, philo->n + 1, "died");
+			printf("%lld\t%d\t %s\n", \
+				time_to_ms(now) - time_to_ms(philo->info->create_at), \
+				philo->n + 1, "died");
 			philo->info->finish = 1;
 		}
 		pthread_mutex_unlock(&philo->info->finish_mutex);
